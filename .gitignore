@@ -1,0 +1,7 @@
+*.qlf
+*.tmp
+*.swp
+*.out
+*.zip
+/.plunit
+

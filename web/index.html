@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Song Writer</title>
+  <link rel="stylesheet" href="song-writer.css">
+</head>
+<body>
+  <main class="layout">
+    <section class="panel">
+      <h1>Song Writer</h1>
+      <label for="prompt">Chat</label>
+      <textarea id="prompt" placeholder="Describe a song or edit the current one."></textarea>
+      <div class="actions">
+        <button id="generate">Generate</button>
+      </div>
+      <pre id="chat-log"></pre>
+    </section>
+
+    <section class="panel">
+      <h2>Player</h2>
+      <div id="player">Play/pause/seek placeholder for generated MIDI/browser rendering.</div>
+      <h2>Song structure</h2>
+      <div id="structure" class="blocks">INTRO | VERSE | PRE | CHORUS | BRIDGE | OUTRO</div>
+      <h2>Tracks</h2>
+      <ul id="tracks">
+        <li>Bass</li>
+        <li>Harmony</li>
+        <li>Lead</li>
+        <li>Percussion</li>
+      </ul>
+    </section>
+
+    <section class="panel">
+      <h2>Lyrics</h2>
+      <textarea id="lyrics" placeholder="Lyrics sheet appears here."></textarea>
+      <h2>Inspector</h2>
+      <pre id="inspector"></pre>
+    </section>
+  </main>
+
+  <script src="player.js"></script>
+  <script src="editor.js"></script>
+  <script src="song-writer.js"></script>
+</body>
+</html>
+
