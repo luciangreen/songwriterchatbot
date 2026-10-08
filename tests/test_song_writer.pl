@@ -5,6 +5,7 @@
 :- use_module('../song_export.pl').
 :- use_module('../song_originality.pl').
 :- use_module('../song_spec_parser.pl').
+:- use_module('../music_composer_adapter.pl').
 :- use_module('acceptance_pairs.pl').
 
 test(single_sentence_produces_complete_song) :-
@@ -57,6 +58,26 @@ test(instrumentation_change_preserves_harmony) :-
     field_value(Project, instruments, Instruments),
     member(strings, Instruments).
 
+test(acceptance_lyric_edit_preserves_music) :-
+    song_writer("Happy piano pop song with lyrics about finally finishing university.", Project0),
+    field_value(Project0, harmony, Harmony),
+    edit_song(Project0, "Keep the music but remove the lyrics.", Project),
+    field_value(Project, lyrics, lyrics_sheet([])),
+    field_value(Project, harmony, Harmony),
+    field_value(Project, interpreted_spec, Spec),
+    spec_value(Spec, lyrics, off).
+
+test(acceptance_instrument_and_structure_edits) :-
+    song_writer("Happy piano pop song with lyrics about summer.", Project0),
+    edit_song(Project0, "Replace the piano with strings.", InstrumentProject),
+    field_value(InstrumentProject, instruments, Instruments),
+    member(strings, Instruments),
+    \+ member(piano, Instruments),
+    edit_song(Project0, "Shorten the intro.", StructureProject),
+    field_value(StructureProject, interpreted_spec, Spec),
+    spec_value(Spec, sections, Sections),
+    member(section(intro, 2, _, _), Sections).
+
 test(subsequent_chat_instructions_create_revision_history) :-
     song_writer("Happy guitar pop song with lyrics about finally finishing university.", Project0),
     edit_song(Project0, "More energetic.", Project1),
@@ -77,6 +98,15 @@ test(hooks_recur_coherently) :-
     generate_song(Spec, Song),
     field_value(Song, hooks, Hooks),
     member(hook(_, _, recurrence([_|_]), _), Hooks).
+
+test(adapter_respects_spec_for_hooks) :-
+    interpret_song_spec("A mysterious instrumental song about walking through Melbourne at 3 AM.", Spec0),
+    expand_song_idea(Spec0, Spec1),
+    dramatise_spec(Spec1, Spec),
+    song_spec_to_music_composer(Spec, MCSpec),
+    music_composer_generate(MCSpec, Song),
+    field_value(Song, hooks, Hooks),
+    \+ member(hook(lyrical, _, _, _), Hooks).
 
 test(sections_have_beginning_development_and_ending) :-
     song_writer("Create a restrained instrumental that blooms into celebration.", Project),

@@ -16,7 +16,8 @@ song_spec_to_music_composer(Spec, mc_spec([
     instrumentation(Instrumentation),
     production(Production),
     effects(Effects),
-    lyrics_mode(LyricsMode)
+    lyrics_mode(LyricsMode),
+    hooks(Hooks)
 ])) :-
     spec_value(Spec, form, Form),
     spec_value(Spec, sections, Sections),
@@ -26,7 +27,8 @@ song_spec_to_music_composer(Spec, mc_spec([
     spec_value(Spec, instrumentation, Instrumentation),
     spec_value(Spec, production, Production),
     spec_value(Spec, effects, Effects),
-    spec_value(Spec, lyrics, LyricsMode).
+    spec_value(Spec, lyrics, LyricsMode),
+    generate_hooks(Spec, Hooks).
 
 music_composer_generate(mc_spec(Fields), song([
     form(Form),
@@ -49,11 +51,7 @@ music_composer_generate(mc_spec(Fields), song([
     member(instrumentation(Instrumentation), Fields),
     member(production(Production), Fields),
     member(effects(Effects), Fields),
-    generate_hooks(song_spec([
-        genre(pop),
-        mood(evocative),
-        lyrics(on)
-    ]), Hooks),
+    member(hooks(Hooks), Fields),
     findall(track(Instrument, Role),
         (member(Instrument, Instrumentation), instrument_role(Instrument, Role)),
         Tracks).
@@ -70,4 +68,3 @@ instrument_role(piano, harmony).
 instrument_role(electric_guitar, harmony).
 instrument_role(pads, texture).
 instrument_role(_, support).
-
