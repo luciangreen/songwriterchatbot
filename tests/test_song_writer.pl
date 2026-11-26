@@ -177,4 +177,28 @@ test(acceptance_pairs_cover_all_categories) :-
     acceptance_category_count(originality_check_cases, 10),
     acceptance_category_count(multi_turn_chatbot_cases, 10).
 
+test(sad_ballad_is_slow_and_minor) :-
+    song_writer("Sad piano ballad about losing a friend.", Project),
+    field_value(Project, interpreted_spec, Spec),
+    spec_value(Spec, mood, Mood),
+    spec_value(Spec, genre, Genre),
+    spec_value(Spec, mode, Mode),
+    spec_value(Spec, tempo, bpm(BPM)),
+    assertion(Mood == sad),
+    assertion(Genre == ballad),
+    assertion(Mode == minor),
+    assertion(BPM < 90).
+
+test(title_from_subject) :-
+    song_writer("Sad piano ballad about losing a friend.", Project),
+    field_value(Project, title, Title),
+    assertion(Title == "Losing a Friend").
+
+test(sad_and_happy_lyrics_differ) :-
+    song_writer("Sad piano ballad about losing a friend.", Sad),
+    song_writer("Happy guitar pop song with lyrics about losing a friend.", Happy),
+    field_value(Sad, lyrics, SadLyrics),
+    field_value(Happy, lyrics, HappyLyrics),
+    assertion(SadLyrics \== HappyLyrics).
+
 :- end_tests(song_writer).
