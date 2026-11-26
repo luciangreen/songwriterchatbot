@@ -43,6 +43,29 @@ lyric_sections_for(sectional(_), Subject, Mood, [
     format(string(ChorusLine2), "A sudden colour running straight through ~w", [MoodWord]).
 lyric_sections_for(auto, Subject, Mood, Sections) :-
     lyric_sections_for(on, Subject, Mood, Sections).
+% Low moods get their own lines; others keep the bright template.
+lyric_sections_for(on, Subject, Mood, [
+    lyric_section(verse_1, [
+        VerseLine1,
+        "Every small thing still holds a trace"
+    ]),
+    lyric_section(chorus, [
+        "Now the quiet fills the space you knew",
+        ChorusLine
+    ]),
+    lyric_section(verse_2, [
+        "I keep a light on by the door",
+        "The silence says your name"
+    ]),
+    lyric_section(bridge, [
+        "Hold the photograph a little longer",
+        "Let the rain say what I cannot"
+    ])
+]) :-
+    low_mood(Mood),
+    !,
+    format(string(VerseLine1), "I carry the weight of ~w alone", [Subject]),
+    format(string(ChorusLine), "And ~w is where my heart stays true", [Subject]).
 lyric_sections_for(on, Subject, Mood, [
     lyric_section(verse_1, [
         VerseLine1,
@@ -65,9 +88,13 @@ lyric_sections_for(on, Subject, Mood, [
     format(string(ChorusLine), "And ~w becomes the heart of the track", [Subject]),
     mood_word(Mood, _).
 
+low_mood(Mood) :- memberchk(Mood, [sad, melancholic, dark, nostalgic]).
+
 mood_word(mysterious, "midnight blue").
 mood_word(exhilarating, "electric heat").
 mood_word(uplifting, "morning gold").
+mood_word(sad, "grey rain").
+mood_word(melancholic, "fading blue").
 mood_word(_, "open air").
 
 replace_section_lines([], _, _, []).

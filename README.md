@@ -83,3 +83,12 @@ Then load modules and run commands interactively:
 ?- ['song_writer.pl'].
 ?- song_writer("Happy guitar pop song with lyrics about finally finishing university.", Project).
 ```
+
+## Moods, genres and titles
+
+Moods now include sad (and sorrowful), calm, angry, romantic, hopeful and
+nostalgic as well as the earlier ones, and genres include ballad, rock, folk
+and jazz. A mood sets the default key and mode (sad: A minor), and sad,
+ballad, calm, gentle and slow lower the energy, so a sad ballad defaults to
+72 beats a minute. Low moods get their own lyric lines. The title is the
+subject in title case, such as "Losing a Friend", when the request has one.

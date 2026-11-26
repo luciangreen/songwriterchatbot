@@ -108,6 +108,9 @@ explicit_attribute(Text, energy(low)) :-
     sub_string(Text, _, _, _, "mysterious").
 explicit_attribute(Text, energy(low)) :-
     sub_string(Text, _, _, _, "quiet").
+explicit_attribute(Text, energy(low)) :-
+    member(Word, ["sad", "ballad", "calm", "gentle", "sorrowful", "slow"]),
+    sub_string(Text, _, _, _, Word).
 explicit_attribute(Text, subject(Subject)) :-
     subject_from_about(Text, Subject).
 explicit_attribute(Text, instrumentation(Instrumentation)) :-
@@ -158,6 +161,7 @@ resolve_or_default(Terms, Name, Default, Value) :-
 
 tempo_for(electronic_pop, high, bpm(126)).
 tempo_for(dance, high, bpm(128)).
+tempo_for(ballad, _, bpm(72)).
 tempo_for(cinematic, _, bpm(102)).
 tempo_for(pop, high, bpm(118)).
 tempo_for(pop, medium, bpm(108)).
@@ -167,6 +171,12 @@ tempo_for(_, _, bpm(100)).
 key_mode_for(mysterious, e, minor).
 key_mode_for(dark, d, minor).
 key_mode_for(melancholic, a, minor).
+key_mode_for(sad, a, minor).
+key_mode_for(angry, e, minor).
+key_mode_for(nostalgic, d, minor).
+key_mode_for(calm, f, major).
+key_mode_for(romantic, f, major).
+key_mode_for(hopeful, g, major).
 key_mode_for(uplifting, g, major).
 key_mode_for(happy, c, major).
 key_mode_for(exhilarating, d, major).
@@ -201,6 +211,10 @@ genre_keyword("cinematic", cinematic).
 genre_keyword("guitar pop", guitar_pop).
 genre_keyword("pop", pop).
 genre_keyword("orchestra", cinematic).
+genre_keyword("ballad", ballad).
+genre_keyword("rock", rock).
+genre_keyword("folk", folk).
+genre_keyword("jazz", jazz).
 
 mood_keyword("mysterious", mysterious).
 mood_keyword("happy", happy).
@@ -209,6 +223,13 @@ mood_keyword("uplifting", uplifting).
 mood_keyword("exhilarating", exhilarating).
 mood_keyword("futuristic", futuristic).
 mood_keyword("melancholic", melancholic).
+mood_keyword("sad", sad).
+mood_keyword("sorrowful", sad).
+mood_keyword("calm", calm).
+mood_keyword("angry", angry).
+mood_keyword("romantic", romantic).
+mood_keyword("hopeful", hopeful).
+mood_keyword("nostalgic", nostalgic).
 
 instrumentation_keyword(Text, strings) :-
     sub_string(Text, _, _, _, "strings").

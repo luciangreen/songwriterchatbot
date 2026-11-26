@@ -29,7 +29,12 @@ build_project(TitleSeed, Prompt, Spec, Inspirations, Lyrics, Song, Outputs, song
     revisions(history([], none, []))
 ])) :-
     uuid(Id),
-    title_from_seed(TitleSeed, Title),
+    (   spec_value(Spec, subject, Subject),
+        Subject \== general_story,
+        title_from_subject(Subject, Title0)
+    ->  Title = Title0
+    ;   title_from_seed(TitleSeed, Title)
+    ),
     spec_value(Spec, form, Form),
     spec_value(Spec, melody, Melody),
     spec_value(Spec, harmony, Harmony),
@@ -86,6 +91,28 @@ apply_snapshot(Project, snapshot(Fields), History, Updated) :-
     Updated = song_project([revisions(History)|Fields]).
 
 is_revisions(revisions(_)).
+
+% The title is the subject in title case: "losing a friend" gives
+% "Losing a Friend".
+title_from_subject(Subject, Title) :-
+    text_string(Subject, Text),
+    split_string(Text, " _", " ", Parts0),
+    exclude(=(""), Parts0, Parts),
+    Parts = [First|Rest],
+    capitalise(First, FirstCap),
+    maplist(title_word, Rest, RestCap),
+    atomic_list_concat([FirstCap|RestCap], ' ', Atom),
+    atom_string(Atom, Title).
+
+title_word(Word, Word) :-
+    memberchk(Word, ["a", "an", "the", "of", "to", "and", "in", "on", "at", "for", "with", "by"]), !.
+title_word(Word, Cap) :- capitalise(Word, Cap).
+
+capitalise(Word, Cap) :-
+    sub_string(Word, 0, 1, After, First),
+    sub_string(Word, 1, After, 0, Rest),
+    string_upper(First, Upper),
+    string_concat(Upper, Rest, Cap).
 
 title_from_seed(Seed, Title) :-
     text_string(Seed, Text),
